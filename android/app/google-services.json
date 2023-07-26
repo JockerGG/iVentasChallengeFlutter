@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "416311203021",
+    "project_id": "iventaschallenge",
+    "storage_bucket": "iventaschallenge.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:416311203021:android:24a13e3b17d5c980538584",
+        "android_client_info": {
+          "package_name": "com.challenge.iventas.iventas_challenge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "416311203021-5qhm0eftr0t56fvggo63i8l1vhd5u0mc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPI_hEsmbJJnY250G4VmJbcY5_AluR6Ho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "416311203021-5qhm0eftr0t56fvggo63i8l1vhd5u0mc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
