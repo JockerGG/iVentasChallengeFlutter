@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iventas_challenge/src/common/bloc/bloc_provider.dart';
 import 'package:iventas_challenge/src/common/di/dependencies_provider.dart';
-import 'package:iventas_challenge/src/presentation/login/bloc/login_bloc.dart';
-import 'package:iventas_challenge/src/presentation/login/login_screen.dart';
+import 'package:iventas_challenge/src/presentation/login/signin/bloc/signin_bloc.dart';
+import 'package:iventas_challenge/src/presentation/login/signin/signin_screen.dart';
+import 'package:iventas_challenge/src/presentation/login/signup/bloc/signup_bloc.dart';
 
 final class App extends StatelessWidget {
   const App({super.key});
@@ -12,7 +13,7 @@ final class App extends StatelessWidget {
     if (FirebaseAuth.instance.currentUser != null) {
       return const Text("Logged");
     } else {
-      return LoginScreen();
+      return SigninScreen();
     }
   }
 
@@ -23,7 +24,7 @@ final class App extends StatelessWidget {
       title: "iVentasChallenge",
       theme: ThemeData(primarySwatch: Colors.blue, canvasColor: Colors.grey),
       home: BlocProvider(
-        blocs: [() => getIt<LoginBloc>()],
+        bloc: getIt<SigninBloc>(),
         child: getHomeComponent(),
       ),
     );

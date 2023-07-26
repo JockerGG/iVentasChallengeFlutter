@@ -2,19 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:iventas_challenge/src/common/bloc/bloc_provider.dart';
 import 'package:iventas_challenge/src/common/widgets/iv_loader.dart';
 import 'package:iventas_challenge/src/common/widgets/iv_textfield.dart';
-import 'package:iventas_challenge/src/presentation/login/bloc/login_state.dart';
+import 'package:iventas_challenge/src/presentation/login/common/login_state.dart';
+import 'package:iventas_challenge/src/presentation/login/signup/bloc/signup_bloc.dart';
 import 'package:iventas_challenge/src/utils/Utils.dart';
-import 'bloc/login_bloc.dart';
 
-final class LoginScreen extends StatelessWidget {
+final class SignupScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
-  LoginScreen({super.key});
+  SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    LoginBloc bloc = BlocProvider.of(context);
+    SignupBloc bloc = BlocProvider.of(context);
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
           child: StreamBuilder(
@@ -32,7 +43,7 @@ final class LoginScreen extends StatelessWidget {
                   const Image(
                       image: AssetImage('assets/iventas.png'), height: 50),
                   const SizedBox(height: 28),
-                  const Text("Iniciar sesión",
+                  const Text("Registro",
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w600,
@@ -68,24 +79,13 @@ final class LoginScreen extends StatelessWidget {
                                 onPressed: () {
                                   if (_formKey.currentState?.validate() ??
                                       false) {
-                                    bloc.performLogin();
+                                    bloc.performSignup();
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.black),
-                                child: const Text("Inciar sesión"),
+                                child: const Text("Registrarse"),
                               )
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                  onPressed: () {},
-                                  child: const Text(
-                                    "Registrarse",
-                                    style: TextStyle(color: Colors.black),
-                                  ))
                             ],
                           ),
                         ],

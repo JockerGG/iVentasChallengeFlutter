@@ -2,39 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:iventas_challenge/src/common/bloc/bloc.dart';
 
 final class BlocProvider<T extends Bloc> extends StatefulWidget {
-  const BlocProvider({Key? key, required this.child, required this.blocs})
+  const BlocProvider({Key? key, required this.child, required this.bloc})
       : super(key: key);
 
-  final List<Function> blocs;
+  final T bloc;
   final Widget child;
 
   @override
-  createState() => BlocProviderState(blocs.map<Bloc>((b) => b()).toList());
+  createState() => BlocProviderState();
 
-  static T of<T extends Bloc>(BuildContext? context) {
-    BlocProviderState? provider =
-        context?.findAncestorStateOfType<BlocProviderState>();
-
-    T? bloc = provider?.blocs.firstWhere((b) => b is T) as T?;
-
-    if (bloc != null) {
-      return bloc;
-    }
-
-    return BlocProvider.of(provider?.context);
+  static T of<T extends Bloc>(BuildContext context) {
+    BlocProvider? provider =
+        context.findAncestorStateOfType<BlocProviderState>()?.widget;
+    assert(provider != null);
+    return provider!.bloc as T;
   }
 }
 
 class BlocProviderState<T> extends State<BlocProvider<Bloc>> {
-  List<Bloc> blocs;
-
-  BlocProviderState(this.blocs);
-
   @override
   void dispose() {
-    for (var bloc in blocs) {
-      bloc.dispose();
-    }
+    widget.bloc.dispose();
     super.dispose();
   }
 
