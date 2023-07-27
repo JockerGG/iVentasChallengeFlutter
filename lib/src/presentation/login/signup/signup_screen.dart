@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iventas_challenge/src/common/bloc/bloc_provider.dart';
+import 'package:iventas_challenge/src/common/di/dependencies_provider.dart';
 import 'package:iventas_challenge/src/common/widgets/iv_loader.dart';
 import 'package:iventas_challenge/src/presentation/login/common/login_form.dart';
 import 'package:iventas_challenge/src/presentation/login/signup/bloc/signup_bloc.dart';
+import 'package:iventas_challenge/src/presentation/users_list/bloc/users_list_bloc.dart';
 import 'package:iventas_challenge/src/presentation/users_list/users_list_screen.dart';
 
 final class SignupScreen extends StatelessWidget {
@@ -49,7 +51,10 @@ final class SignupScreen extends StatelessWidget {
                       if (context.mounted) {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (context) => const UsersListScreen()),
+                                builder: (context) => BlocProvider(
+                                      bloc: getIt<UsersListBloc>(),
+                                      child: const UsersListScreen(),
+                                    )),
                             ModalRoute.withName("/"));
                       }
                     }

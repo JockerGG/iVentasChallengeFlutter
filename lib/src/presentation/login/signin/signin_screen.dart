@@ -5,6 +5,7 @@ import 'package:iventas_challenge/src/common/widgets/iv_loader.dart';
 import 'package:iventas_challenge/src/presentation/login/common/login_form.dart';
 import 'package:iventas_challenge/src/presentation/login/signup/bloc/signup_bloc.dart';
 import 'package:iventas_challenge/src/presentation/login/signup/signup_screen.dart';
+import 'package:iventas_challenge/src/presentation/users_list/bloc/users_list_bloc.dart';
 import 'package:iventas_challenge/src/presentation/users_list/users_list_screen.dart';
 import 'bloc/signin_bloc.dart';
 
@@ -46,10 +47,12 @@ final class SigninScreen extends StatelessWidget {
                         if (state?.isButtonEnabled ?? false) {
                           if (await bloc.performSignin()) {
                             if (context.mounted) {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const UsersListScreen()));
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                      builder: (context) => BlocProvider(
+                                            bloc: getIt<UsersListBloc>(),
+                                            child: const UsersListScreen(),
+                                          )));
                             }
                           }
                         }

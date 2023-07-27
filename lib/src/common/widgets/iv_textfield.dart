@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:developer' as developer;
 
 final class IVTextfield extends StatefulWidget {
   final String hintText;

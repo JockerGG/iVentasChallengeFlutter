@@ -33,9 +33,6 @@ abstract class LoginState {
           isButtonEnabled: isButtonEnabled,
           showPassword: showPassword);
 
-  factory LoginState.loginSuccess({required String token}) => LoginSuccessState(
-      username: "", password: "", isLoading: false, token: token);
-
   factory LoginState.loginFailed(
           {required String? username,
           required String? password,
@@ -58,17 +55,6 @@ final class UpdateLoginDataState extends LoginState {
       required bool isButtonEnabled})
       : super(username, password, usernameError, passwordError, isLoading,
             showPassword, isButtonEnabled);
-}
-
-final class LoginSuccessState extends LoginState {
-  final String token;
-
-  LoginSuccessState(
-      {required String? username,
-      required String? password,
-      required bool isLoading,
-      required this.token})
-      : super(username, password, null, null, isLoading, false, true);
 }
 
 final class LoginFailState extends LoginState {
