@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer;
 
-typedef FormValidator = String? Function(String?);
-
-final class IVTextfield extends StatelessWidget {
+final class IVTextfield extends StatefulWidget {
   final String hintText;
+  final double height;
+  final TextInputType? keyboardType;
+  final String? errorText;
   final bool secureEntry;
   final bool showPassword;
-  final TextInputType? keyboardType;
   final Function(String)? onChanged;
-  final FormValidator? validator;
   final Function()? toogleShowPassword;
 
-  const IVTextfield(this.hintText, this.onChanged,
-      {this.secureEntry = false,
+  const IVTextfield(
+      {super.key,
+      required this.hintText,
+      this.height = 40,
+      this.keyboardType = TextInputType.text,
+      this.errorText,
+      this.secureEntry = false,
       this.showPassword = false,
-      this.keyboardType,
-      this.validator,
-      this.toogleShowPassword,
-      super.key});
+      this.onChanged,
+      this.toogleShowPassword});
 
+  @override
+  _IVTextfieldState createState() => _IVTextfieldState();
+}
+
+final class _IVTextfieldState extends State<IVTextfield> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,23 +34,23 @@ final class IVTextfield extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextFormField(
-            decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: hintText,
-                suffixIcon: secureEntry
-                    ? IconButton(
-                        icon: Icon(showPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                        onPressed: toogleShowPassword)
-                    : null),
-            onChanged: onChanged,
-            validator: validator,
-            obscureText: !showPassword && secureEntry,
-            keyboardType: keyboardType,
-          ),
-        )
+          child: TextField(
+              decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: widget.hintText,
+                  errorText: widget.errorText,
+                  suffixIcon: widget.secureEntry
+                      ? IconButton(
+                          icon: Icon(widget.showPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: widget.toogleShowPassword)
+                      : null),
+              onChanged: widget.onChanged,
+              obscureText: !widget.showPassword && widget.secureEntry,
+              cursorOpacityAnimates: false,
+              keyboardType: widget.keyboardType),
+        ),
       ],
     );
   }

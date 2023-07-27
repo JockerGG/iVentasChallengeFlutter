@@ -1,20 +1,36 @@
 abstract class LoginState {
   final String? username;
   final String? password;
+  final String? usernameError;
+  final String? passwordError;
   final bool isLoading;
   final bool showPassword;
+  final bool isButtonEnabled;
 
-  LoginState(this.username, this.password, this.isLoading, this.showPassword);
+  LoginState(
+      this.username,
+      this.password,
+      this.usernameError,
+      this.passwordError,
+      this.isLoading,
+      this.showPassword,
+      this.isButtonEnabled);
 
   factory LoginState.updateData(
           {required String? username,
           required String? password,
+          required String? usernameError,
+          required String? passwordError,
           required bool showPassword,
+          required bool isButtonEnabled,
           bool isLoading = false}) =>
       UpdateLoginDataState(
           username: username,
           password: password,
+          usernameError: usernameError,
+          passwordError: passwordError,
           isLoading: isLoading,
+          isButtonEnabled: isButtonEnabled,
           showPassword: showPassword);
 
   factory LoginState.loginSuccess({required String token}) => LoginSuccessState(
@@ -35,9 +51,13 @@ final class UpdateLoginDataState extends LoginState {
   UpdateLoginDataState(
       {required String? username,
       required String? password,
+      required String? usernameError,
+      required String? passwordError,
       required bool isLoading,
-      required bool showPassword})
-      : super(username, password, isLoading, showPassword);
+      required bool showPassword,
+      required bool isButtonEnabled})
+      : super(username, password, usernameError, passwordError, isLoading,
+            showPassword, isButtonEnabled);
 }
 
 final class LoginSuccessState extends LoginState {
@@ -48,7 +68,7 @@ final class LoginSuccessState extends LoginState {
       required String? password,
       required bool isLoading,
       required this.token})
-      : super(username, password, isLoading, false);
+      : super(username, password, null, null, isLoading, false, true);
 }
 
 final class LoginFailState extends LoginState {
@@ -59,5 +79,5 @@ final class LoginFailState extends LoginState {
       required String? password,
       required bool isLoading,
       required this.message})
-      : super(username, password, isLoading, false);
+      : super(username, password, null, null, false, false, true);
 }

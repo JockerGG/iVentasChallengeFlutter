@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:iventas_challenge/src/common/bloc/bloc_provider.dart';
 import 'package:iventas_challenge/src/common/widgets/iv_loader.dart';
-import 'package:iventas_challenge/src/common/widgets/iv_textfield.dart';
-import 'package:iventas_challenge/src/presentation/login/common/login_state.dart';
+import 'package:iventas_challenge/src/presentation/login/common/login_form.dart';
 import 'package:iventas_challenge/src/presentation/login/signup/bloc/signup_bloc.dart';
-import 'package:iventas_challenge/src/utils/Utils.dart';
+import 'package:iventas_challenge/src/presentation/users_list/users_list_screen.dart';
 
 final class SignupScreen extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-
-  SignupScreen({super.key});
+  const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,64 +30,31 @@ final class SignupScreen extends StatelessWidget {
         stream: bloc.observableState,
         builder: (context, snapshot) {
           final state = snapshot.data;
-          if (state is LoginSuccessState) {}
+
           return IVLoader(
               state?.isLoading ?? false,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Image(
-                      image: AssetImage('assets/iventas.png'), height: 50),
-                  const SizedBox(height: 28),
-                  const Text("Registro",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 28)),
-                  Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          IVTextfield("Correo electrónico", bloc.usernameChange,
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (value) {
-                            return validateEmail(value)
-                                ? null
-                                : "Ingresa una dirección de correo válida";
-                          }),
-                          IVTextfield(
-                            "Contraseña",
-                            bloc.passwordChange,
-                            secureEntry: true,
-                            showPassword: state?.showPassword ?? false,
-                            toogleShowPassword: bloc.toogleShowPassword,
-                            validator: (value) {
-                              return (value != null && value.length >= 8)
-                                  ? null
-                                  : "La contraseña debe ser mayor a 8 caracteres.";
-                            },
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState?.validate() ??
-                                      false) {
-                                    bloc.performSignup();
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.black),
-                                child: const Text("Registrarse"),
-                              )
-                            ],
-                          ),
-                        ],
-                      ))
-                ],
+              LoginForm(
+                title: "Registro",
+                emailError: state?.usernameError,
+                passwordError: state?.passwordError,
+                submitTitle: "Registrarse",
+                showPassword: state?.showPassword ?? false,
+                isButtonEnabled: state?.isButtonEnabled ?? false,
+                toogleShowPassword: bloc.toogleShowPassword,
+                onEmailChanged: bloc.usernameChange,
+                onPasswordChanged: bloc.passwordChange,
+                onSubmit: () async {
+                  if (state?.isButtonEnabled ?? false) {
+                    if (await bloc.performSignup()) {
+                      if (context.mounted) {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => const UsersListScreen()),
+                            ModalRoute.withName("/"));
+                      }
+                    }
+                  }
+                },
               ));
         },
       )),
