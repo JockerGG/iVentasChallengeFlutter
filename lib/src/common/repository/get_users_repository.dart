@@ -11,8 +11,10 @@ final class GetUsersRepositoryImpl implements GetUsersRepository {
     FirebaseDatabase.instance.ref('/users').onValue.listen((event) {
       if (event.snapshot.value != null) {
         final Map<dynamic, dynamic> jsonData = (event.snapshot.value as Map);
-        final List<IVUser> users =
-            jsonData.values.map((json) => IVUser.fromJson(json)).toList();
+        final List<IVUser> users = jsonData.entries
+            .map((value) =>
+                IVUser.fromJson(id: value.key as String, json: value.value))
+            .toList();
         onFetched(users);
       }
     });

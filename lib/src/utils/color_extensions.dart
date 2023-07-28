@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
 
-extension Colors on Color {
+extension IVColors on Color {
   String toHex() => '#${value.toRadixString(16)}';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:iventas_challenge/src/common/models/label.dart';
 
 final class IVLabelWidget extends StatelessWidget {

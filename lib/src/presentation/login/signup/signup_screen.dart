@@ -15,15 +15,9 @@ final class SignupScreen extends StatelessWidget {
     SignupBloc bloc = BlocProvider.of(context);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       backgroundColor: Colors.white,
       body: SafeArea(

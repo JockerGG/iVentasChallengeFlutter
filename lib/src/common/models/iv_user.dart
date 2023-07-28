@@ -4,26 +4,28 @@ import 'package:iventas_challenge/src/common/models/field.dart';
 import 'package:iventas_challenge/src/common/models/label.dart';
 
 final class IVUser {
+  String id = "";
   final String name;
   final String lastname;
   final String email;
-  final String image;
+  final String image =
+      "https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp";
   final String phone;
   final List<Label> labels;
   final List<Field> otherFields;
 
-  const IVUser(this.name, this.lastname, this.email, this.image, this.phone,
-      this.labels, this.otherFields);
+  IVUser(this.name, this.lastname, this.email, this.phone, this.labels,
+      this.otherFields);
 
-  factory IVUser.fromJson(json) {
+  factory IVUser.fromJson({required String id, required dynamic json}) {
     final List<dynamic> jsonLabels = json['labels'];
     final List<dynamic> jsonFields = json['otherFields'];
     final List<Label> labels =
         jsonLabels.map((l) => Label.fromJson(l)).toList();
     final List<Field> fields =
         jsonFields.map((f) => Field.fromJson(f)).toList();
-    return IVUser(json['name'], json['lastname'], json['email'], json['image'],
-        json['phone'], labels, fields);
+    return IVUser(json['name'], json['lastname'], json['email'], json['phone'],
+        labels, fields);
   }
 
   Map<String, dynamic> toJson() {

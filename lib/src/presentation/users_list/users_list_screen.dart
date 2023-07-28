@@ -4,6 +4,9 @@ import 'package:iventas_challenge/src/common/bloc/bloc_provider.dart';
 import 'package:iventas_challenge/src/common/di/dependencies_provider.dart';
 import 'package:iventas_challenge/src/presentation/login/signin/bloc/signin_bloc.dart';
 import 'package:iventas_challenge/src/presentation/login/signin/signin_screen.dart';
+import 'package:iventas_challenge/src/presentation/user_details/bloc/user_details_bloc.dart';
+import 'package:iventas_challenge/src/presentation/user_details/bloc/user_details_state.dart';
+import 'package:iventas_challenge/src/presentation/user_details/user_details_screen.dart';
 import 'package:iventas_challenge/src/presentation/users_list/bloc/users_list_bloc.dart';
 import 'package:iventas_challenge/src/presentation/users_list/bloc/users_list_state.dart';
 import 'package:iventas_challenge/src/presentation/users_list/iv_user_widget.dart';
@@ -57,7 +60,18 @@ final class UsersListScreen extends StatelessWidget {
                 itemCount: state?.users.length ?? 0,
                 itemBuilder: ((context, index) {
                   if (state != null) {
-                    return IVUserWidget(state.users[index]);
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            bloc: getIt<UsersDetailsBloc>(),
+                            child: UserDetailsScreen(
+                                state.users[index], FormType.edit),
+                          ),
+                        ));
+                      },
+                      child: IVUserWidget(state.users[index]),
+                    );
                   } else {
                     return Container();
                   }
@@ -66,7 +80,14 @@ final class UsersListScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BlocProvider(
+              bloc: getIt<UsersDetailsBloc>(),
+              child: const UserDetailsScreen(null, FormType.create),
+            ),
+          ));
+        },
         backgroundColor: Colors.black,
         child: const Icon(Icons.add),
       ),
