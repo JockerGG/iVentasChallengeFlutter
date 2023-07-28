@@ -12,8 +12,7 @@ final class GetUsersRepositoryImpl implements GetUsersRepository {
       if (event.snapshot.value != null) {
         final Map<dynamic, dynamic> jsonData = (event.snapshot.value as Map);
         final List<IVUser> users = jsonData.entries
-            .map((value) =>
-                IVUser.fromJson(id: value.key as String, json: value.value))
+            .map((value) => IVUser.fromJson(json: value.value))
             .toList();
         onFetched(users);
       }

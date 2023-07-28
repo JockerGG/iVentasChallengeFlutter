@@ -11,7 +11,9 @@ abstract class Bloc<T> {
   @protected
   void changeState(T state) {
     _state = state;
-    _stateController.sink.add(state);
+    if (!_stateController.isClosed) {
+      _stateController.sink.add(state);
+    }
   }
 
   void dispose() {

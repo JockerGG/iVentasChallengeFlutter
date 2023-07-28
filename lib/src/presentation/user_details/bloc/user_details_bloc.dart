@@ -37,6 +37,8 @@ final class UsersDetailsBloc extends Bloc<UserDetailsState> {
   Map<String, TextEditingController> _controllers = {};
   List<String> _addedControllers = [];
   Map<String, TextEditingController> _deletedControllers = {};
+  String _id = "";
+
   UsersDetailsBloc(this._setUserRepository, this._updateUserRepository,
       this._deleteUserRepository) {
     init(null);
@@ -46,6 +48,7 @@ final class UsersDetailsBloc extends Bloc<UserDetailsState> {
     this.user = user;
     this.formType = formType;
     if (user != null) {
+      _id = user.id;
       originalUser = user.toJson();
       Map userJson = user.toJson();
       userJson.remove("labels");
@@ -79,17 +82,18 @@ final class UsersDetailsBloc extends Bloc<UserDetailsState> {
 
   void update(String field, String value, {bool mainFields = true}) {
     if (state.user != null) {
+      IVUser userUpdated = state.user!;
       Map<String, dynamic> user = state.user!.toJson();
       if (mainFields) {
         user[field] = value;
+        userUpdated = IVUser.fromJson(json: user);
       } else {
-        user["otherFields"][field] = value;
+        final index =
+            userUpdated.otherFields.indexWhere((f) => f.name == field);
+        userUpdated.otherFields[index] = Field(field, value);
       }
 
-      IVUser userUpdated = IVUser.fromJson(id: state.user!.id, json: user);
-      final hasChanges = userUpdated != this.user &&
-          userUpdated.name.isNotEmpty &&
-          userUpdated.lastname.isNotEmpty;
+      final hasChanges = userUpdated != IVUser.fromJson(json: originalUser);
       changeState(UserDetailsState.updateUser(
           userUpdated, state.isEditing, hasChanges));
     }
@@ -97,7 +101,7 @@ final class UsersDetailsBloc extends Bloc<UserDetailsState> {
 
   void _restoreInformation() {
     if (user != null) {
-      final restoredUser = IVUser.fromJson(id: user!.id, json: originalUser);
+      final restoredUser = IVUser.fromJson(json: originalUser);
       Map userJson = restoredUser.toJson();
       userJson.remove("labels");
       userJson.remove("otherFields");
@@ -171,7 +175,7 @@ final class UsersDetailsBloc extends Bloc<UserDetailsState> {
   Future<String?> saveChanges() async {
     if (state.user != null) {
       if (formType == FormType.edit) {
-        return await _updateUserRepository.update(state.user!);
+        return await _updateUserRepository.update(_id, state.user!);
       } else {
         return await _setUserRepository.set(state.user!);
       }

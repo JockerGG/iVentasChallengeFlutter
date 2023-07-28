@@ -16,7 +16,7 @@ final class UserDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UsersDetailsBloc bloc = BlocProvider.of(context);
-    bloc.init(_user ?? IVUser("", "", "", "", [], []), formType: _type);
+    bloc.init(_user ?? IVUser("", "", "", "", "", [], []), formType: _type);
     final title = _type == FormType.edit ? "Editar usuario" : "Crear usuario";
 
     return StreamBuilder(
@@ -106,35 +106,47 @@ final class UserDetailsScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state?.user?.otherFields.length ?? 0,
-                            itemBuilder: (context, index) {
-                              if (state?.user?.otherFields != null) {
-                                Field field = state!.user!.otherFields[index];
-                                return IVTextfield(
-                                  hintText: field.name,
-                                  initialText: field.value,
-                                  enabled: isEditing,
-                                  controller: bloc.getController(field.name),
-                                  suffixIcon: isEditing
-                                      ? IconButton(
-                                          onPressed: () =>
-                                              bloc.removeField(field),
-                                          icon: const Icon(
-                                            Icons.remove_circle,
-                                            color: Colors.red,
-                                          ))
-                                      : null,
-                                  onChanged: (value) =>
-                                      bloc.update(field.name, value),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
-                          ),
+                          if (state?.user?.otherFields.isNotEmpty ?? false)
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state?.user?.otherFields.length ?? 0,
+                              itemBuilder: (context, index) {
+                                if (state?.user?.otherFields != null) {
+                                  Field field = state!.user!.otherFields[index];
+                                  return IVTextfield(
+                                    hintText: field.name,
+                                    initialText: field.value,
+                                    enabled: isEditing,
+                                    controller: bloc.getController(field.name),
+                                    suffixIcon: isEditing
+                                        ? IconButton(
+                                            onPressed: () =>
+                                                bloc.removeField(field),
+                                            icon: const Icon(
+                                              Icons.remove_circle,
+                                              color: Colors.red,
+                                            ))
+                                        : null,
+                                    onChanged: (value) => bloc.update(
+                                        field.name, value,
+                                        mainFields: false),
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
+                          if (state?.user?.otherFields.isEmpty ?? true)
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16, right: 16, top: 8, bottom: 8),
+                              child: Text(
+                                "Aquí puedes agregar información adicional del usuario",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w400),
+                              ),
+                            ),
                           Padding(
                             padding: const EdgeInsets.only(
                                 top: 8, left: 16, right: 16),
@@ -156,26 +168,38 @@ final class UserDetailsScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state?.user?.labels.length ?? 0,
-                            itemBuilder: (context, index) {
-                              if (state?.user?.labels != null) {
-                                Label label = state!.user!.labels[index];
-                                return Chip(
-                                  label: Text(
-                                    label.label,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  backgroundColor: label.labelColor,
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
-                          )
+                          if (state?.user?.labels.isNotEmpty ?? false)
+                            ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state?.user?.labels.length ?? 0,
+                              itemBuilder: (context, index) {
+                                if (state?.user?.labels != null) {
+                                  Label label = state!.user!.labels[index];
+                                  return Chip(
+                                    label: Text(
+                                      label.label,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                    backgroundColor: label.labelColor,
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
+                          if (state?.user?.labels.isEmpty ?? true)
+                            const Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16, right: 16, top: 8, bottom: 8),
+                              child: Text(
+                                "Aquí puedes agregar etiquetas para una mayor información.",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w400),
+                              ),
+                            )
                         ])),
                   ],
                 ),

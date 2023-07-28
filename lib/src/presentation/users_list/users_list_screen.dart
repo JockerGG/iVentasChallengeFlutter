@@ -24,6 +24,7 @@ final class UsersListScreen extends StatelessWidget {
         title: const Text("Lista de usuarios"),
         backgroundColor: Colors.black,
         leading: null,
+        automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20.0, top: 20.0),

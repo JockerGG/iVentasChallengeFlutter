@@ -49,6 +49,7 @@ final class _IVTextfieldState extends State<IVTextfield> {
               onChanged: widget.onChanged,
               controller: widget.controller,
               enabled: widget.enabled,
+              autocorrect: false,
               obscureText: !widget.showPassword && widget.secureEntry,
               keyboardType: widget.keyboardType),
         ),
